@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Image Slider</title>
+  <style>
+    body {
+      font-family: Arial;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #2193b0, #6dd5ed);
+      margin: 0;
+    }
+
+    .slider {
+      position: relative;
+      width: 400px;
+      height: 250px;
+      overflow: hidden;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .slides {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .slides img {
+      width: 400px;
+      height: 250px;
+      object-fit: cover;
+    }
+
+    .btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.5);
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 50%;
+    }
+
+    .prev { left: 10px; }
+    .next { right: 10px; }
+
+    .dots {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .dot {
+      height: 10px;
+      width: 10px;
+      margin: 5px;
+      background: white;
+      display: inline-block;
+      border-radius: 50%;
+      opacity: 0.5;
+      cursor: pointer;
+    }
+
+    .active {
+      opacity: 1;
+      background: yellow;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="slider">
+  <div class="slides" id="slides">
+    <img src="https://picsum.photos/id/1015/400/250">
+    <img src="https://picsum.photos/id/1016/400/250">
+    <img src="https://picsum.photos/id/1018/400/250">
+  </div>
+
+  <button class="btn prev" onclick="move(-1)">❮</button>
+  <button class="btn next" onclick="move(1)">❯</button>
+
+  <div class="dots" id="dots"></div>
+</div>
+
+<script>
+let index = 0;
+let slides = document.getElementById("slides");
+let total = slides.children.length;
+let dotsContainer = document.getElementById("dots");
+
+// Create dots
+for (let i = 0; i < total; i++) {
+  let dot = document.createElement("span");
+  dot.classList.add("dot");
+  dot.onclick = () => goTo(i);
+  dotsContainer.appendChild(dot);
+}
+updateDots();
+
+function move(step) {
+  index = (index + step + total) % total;
+  updateSlider();
+}
+
+function goTo(i) {
+  index = i;
+  updateSlider();
+}
+
+function updateSlider() {
+  slides.style.transform = `translateX(-${index * 400}px)`;
+  updateDots();
+}
+
+function updateDots() {
+  let dots = document.querySelectorAll(".dot");
+  dots.forEach(d => d.classList.remove("active"));
+  dots[index].classList.add("active");
+}
+
+// Auto slide
+setInterval(() => {
+  move(1);
+}, 3000);
+</script>
+
+</body>
+</html>
